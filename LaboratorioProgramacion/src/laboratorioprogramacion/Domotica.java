@@ -11,11 +11,11 @@ import java.util.concurrent.Callable;
  *
  * @author Leo
  */
-public class Domotica implements Callable{
+public class Domotica implements Callable<Integer>{
     int identificador;
     ControlUniversalTarget control;
    
-    public void run(){
+    public Integer call(){
         Random random = new Random();
         int randomInt=random.nextInt(2);
         switch(randomInt){
@@ -23,6 +23,11 @@ public class Domotica implements Callable{
             case 1: control.bajarVolumen(); break;
             case 2: control.cambiarCanal(); break;
         }
+        return identificador;
+    }
+    
+    public Domotica(int id){
+        identificador=id;
     }
     
 }
