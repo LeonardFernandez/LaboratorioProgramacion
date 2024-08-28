@@ -18,18 +18,22 @@ public class Main {
             
     public static void main(String[] args) {
         semOnOff = new Semaphore(0);
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4);
         //Se crea controlDomotica con semaforo
         Callable<Integer> onOff = new ControlDomotica(semOnOff);
         //Creamos las diferentes tareas(callable) de domotica
-        Callable<Integer> tarea1 = new Domotica(0);
-        Callable<Integer> tarea2 = new Domotica(1);
-        Callable<Integer> tarea3 = new Domotica(2);
+        Callable<Integer> tarea1 = new Domotica(0,semOnOff);
+        Callable<Integer> tarea2 = new Domotica(1,semOnOff);
+        Callable<Integer> tarea3 = new Domotica(2,semOnOff);
         
         //Primer instante se enciende sistema de domotica
         scheduler.schedule(onOff, 0, TimeUnit.SECONDS);
         //Se ejecuta una funcion de domotica a los dos segundos
+        scheduler.schedule(tarea2, 4, TimeUnit.SECONDS);
         scheduler.schedule(tarea1, 2, TimeUnit.SECONDS);
+        scheduler.schedule(tarea3, 6, TimeUnit.SECONDS);
+        //Se apaga TV
+        scheduler.schedule(onOff, 20, TimeUnit.SECONDS);
 
     }
 }
